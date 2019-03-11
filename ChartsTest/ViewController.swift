@@ -14,11 +14,12 @@ import Charts
 // - draw gradient ✅
 // - draw ref range (high/low x-axis) ✅
 // - draw gradient relative to ref range ✅
-// - max 4 values on screen
-// - scroll left to reveal extra
-// - snap to show 4 on screen, perfectly
-// - when < 4 values, centre them
+// - max 4 values on screen ✅
+// - scroll left to reveal extra ✅
+// - snap to show 4 on screen, perfectly ✅
+// - when < 4 values, centre them ✅
 // - line colour to match reference zone ✅
+// - when > 4 values, scroll chart to right-most initially
 
 class ViewController: UIViewController {
 
@@ -117,7 +118,7 @@ class ViewController: UIViewController {
 
         chartView.legend.enabled = false
         chartView.rightAxis.enabled = false
-        chartView.clipDataToContentEnabled = false
+chartView.clipDataToContentEnabled = true
         chartView.chartDescription = nil
         //        chartView.drawBordersEnabled = false
         //        chartView.setExtraOffsets(
@@ -135,7 +136,9 @@ class ViewController: UIViewController {
     }
 
     private func rrrrrender() {
-        let bits: [Double] = [0.56, 0.19, 1.07, 3.16]
+        let bits: [Double] = [1.23, 2.84, 1.8, 3.1, 0.19, 0.8, 1.99, 0.56, 0.19, 1.07, 3.16]
+//        let bits: [Double] = [0.56, 0.19, 1.07, 3.16]
+//        let bits: [Double] = [0.56, 0.19, 1.07]
         let referenceRange = rrrreferenceRange
 
         let entries: [ChartDataEntry] = bits
@@ -164,16 +167,26 @@ class ViewController: UIViewController {
         line.fillAlpha = 0.7
         line.drawFilledEnabled = true
 
+//line.drawValuesEnabled = false
+
         let data = LineChartData(dataSet: line)
 
         // config: renderer
         renderer.referenceRange = referenceRange
 
+        // config: chart
+        chartView.setVisibleXRangeMinimum(4)
+        chartView.setVisibleXRangeMaximum(4)
+//        chartView.moveViewToX(Double(bits.count))
+
         // config: axes
         let xAxis = chartView.xAxis
         xAxis.granularity = 1
-        xAxis.axisMinimum = 0
-        xAxis.axisMaximum = Double(bits.count - 1)
+
+        let padding = Double(4 - (bits.count - 1)) / 2
+        xAxis.spaceMin = max(0.5, padding)
+        xAxis.spaceMax = max(0.5, padding)
+
         xAxis.drawAxisLineEnabled = false
         xAxis.drawGridLinesEnabled = false
         xAxis.drawLabelsEnabled = false
@@ -200,6 +213,7 @@ class ViewController: UIViewController {
         llu.lineWidth = 2
         llu.valueTextColor = .white
 
+
         let lll = ChartLimitLine(limit: referenceRange.lowerBound, label: String(referenceRange.lowerBound))
         lll.lineColor = greenblue
         lll.lineWidth = 2
@@ -208,9 +222,11 @@ class ViewController: UIViewController {
         leftAxis.addLimitLine(llu)
         leftAxis.addLimitLine(lll)
 
+//leftAxis.drawLabelsEnabled = false
+
         // data assignment
         chartView.data = data
 
-        chartView.notifyDataSetChanged()
+//        chartView.notifyDataSetChanged()
     }
 }
