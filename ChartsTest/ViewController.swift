@@ -15,10 +15,10 @@ import Charts
 // - draw ref range (high/low x-axis) ✅
 // - draw gradient relative to ref range ✅
 // - max 4 values on screen ✅
-// - scroll left to reveal extra ✅
-// - snap to show 4 on screen, perfectly ✅
+// - scroll to reveal extra ✅
 // - when < 4 values, centre them ✅
 // - line colour to match reference zone ✅
+// - snap to show 4 on screen, perfectly
 // - when > 4 values, scroll chart to right-most initially
 
 class ViewController: UIViewController {
