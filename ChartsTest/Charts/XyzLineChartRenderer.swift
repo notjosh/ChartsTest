@@ -16,6 +16,16 @@ class XyzLineChartRenderer: LineChartRenderer {
     open var middleLineColor: UIColor!
     open var lowLineColor: UIColor!
 
+    lazy var gradient: CGGradient = {
+        let colours = [
+            lowLineColor.cgColor,
+            middleLineColor.cgColor,
+            highLineColor.cgColor,
+            ] as CFArray
+
+        return CGGradient(colorsSpace: nil, colors: colours, locations: nil)!
+    }()
+
     internal var __xBounds = XBounds()
 
     @objc open override func drawHorizontalBezier(context: CGContext, dataSet: ILineChartDataSet)
@@ -181,13 +191,6 @@ class XyzLineChartRenderer: LineChartRenderer {
         let rangeBottomPoint = trans.pixelForValues(x: 0, y: rangeBottom)
         let rangeHeight = rangeTopPoint.y - rangeBottomPoint.y
         let overflowFactor = CGFloat(0.2)
-
-        let colours = [
-            lowLineColor.cgColor,
-            middleLineColor.cgColor,
-            highLineColor.cgColor,
-            ] as CFArray
-        let gradient = CGGradient(colorsSpace: nil, colors: colours, locations: nil)!
 
         let rect = viewPortHandler.contentRect
 
